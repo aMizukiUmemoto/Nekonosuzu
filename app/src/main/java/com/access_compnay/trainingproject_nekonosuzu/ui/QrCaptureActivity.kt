@@ -1,10 +1,12 @@
 package com.access_compnay.trainingproject_nekonosuzu.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.SurfaceHolder
+import android.widget.Toast
 import com.access_compnay.trainingproject_nekonosuzu.R
 import com.access_compnay.trainingproject_nekonosuzu.viewmodel.EquipmentDetailViewModel
 //import com.access_compnay.trainingproject_nekonosuzu.viewmodel.QrCaptureViewModel
@@ -12,6 +14,7 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.qr_capture_activity.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
@@ -69,11 +72,16 @@ class QrCaptureActivity : AppCompatActivity() {
 
         override fun receiveDetections(detections: Detector.Detections<Barcode>) {
             // TODO: 2つ目以降をどう処理するか？
-            if (detections.detectedItems.size() > 0) {
-                val barcode = detections.detectedItems.valueAt(0)
-                println("■■■barcode="+barcode.rawValue)
-                setResult(RESULT_OK, Intent().apply { putExtra(EXTRA_VALUE, barcode.rawValue) })
-                finish()
+            surfaceView.setOnClickListener { _ ->
+                if (detections.detectedItems.size() == 1) {
+                    val barcode = detections.detectedItems.valueAt(0)
+                    setResult(RESULT_OK, Intent().apply { putExtra(EXTRA_VALUE, barcode.rawValue) })
+                    finish()
+                }else if(detections.detectedItems.size() == 0){
+                    Snackbar.make(surfaceView, "バーコードが認識できません", Snackbar.LENGTH_SHORT).show()
+                }else{
+                    Snackbar.make(surfaceView, "画面内に複数のバーコードが入っています", Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
     }
