@@ -10,6 +10,7 @@ import com.access_compnay.trainingproject_nekonosuzu.R
 import com.access_compnay.trainingproject_nekonosuzu.ui.QrCaptureActivity.Companion.EXTRA_VALUE
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.qr_capture_activity.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,12 +20,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
+            /*
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
+                    */
             // TODO: QrCaptureActivityを起動し、得られたコードがEquipmentListFragmentのリストに含まれるIDであれば、それをタップしたときと同様にopenDetailする
             val openIntent = Intent(this@MainActivity, QrCaptureActivity::class.java)
             startActivityForResult(openIntent,9)
-
         }
     }
 
@@ -32,8 +34,14 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         val res = data?.getStringExtra(EXTRA_VALUE)
-        val openIntent = Intent(this, EquipmentDetailActivity::class.java).apply { putExtra(EquipmentDetailActivity.EXTRA_ID, res) }
-        startActivity(openIntent)
+
+        if (res != null && res.toInt()<20) {
+            val openIntent = Intent(this, EquipmentDetailActivity::class.java).apply { putExtra(EquipmentDetailActivity.EXTRA_ID, res) }
+            startActivity(openIntent)
+        }else{
+            Snackbar.make(main_dsp, "IDが見つかりません", Snackbar.LENGTH_SHORT).show()
+        }
+
     }
 
 
