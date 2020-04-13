@@ -1,11 +1,13 @@
 package com.access_compnay.trainingproject_nekonosuzu.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.access_compnay.trainingproject_nekonosuzu.R
+import com.access_compnay.trainingproject_nekonosuzu.ui.QrCaptureActivity.Companion.EXTRA_VALUE
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,10 +23,19 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
             // TODO: QrCaptureActivityを起動し、得られたコードがEquipmentListFragmentのリストに含まれるIDであれば、それをタップしたときと同様にopenDetailする
             val openIntent = Intent(this@MainActivity, QrCaptureActivity::class.java)
-            startActivity(openIntent)
+            startActivityForResult(openIntent,9)
 
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val res = data?.getStringExtra(EXTRA_VALUE)
+        val openIntent = Intent(this, EquipmentDetailActivity::class.java).apply { putExtra(EquipmentDetailActivity.EXTRA_ID, res) }
+        startActivity(openIntent)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

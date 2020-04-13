@@ -73,7 +73,6 @@ class QrCaptureActivity : AppCompatActivity() {
                 val barcode = detections.detectedItems.valueAt(0)
                 println("■■■barcode="+barcode.rawValue)
                 setResult(RESULT_OK, Intent().apply { putExtra(EXTRA_VALUE, barcode.rawValue) })
-                println("★★")
                 finish()
             }
         }
